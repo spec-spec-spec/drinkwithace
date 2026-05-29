@@ -1,194 +1,284 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Beer Date?</title>
-
-<style>
-body{
-    margin:0;
-    height:100vh;
-    overflow:hidden;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,#ffd6e7,#ffe8b6);
-    font-family:Arial,sans-serif;
-}
-
-.card{
-    background:white;
-    width:90%;
-    max-width:500px;
-    padding:30px;
-    border-radius:30px;
-    box-shadow:0 15px 40px rgba(0,0,0,.15);
-    text-align:center;
-}
-
-h1{
-    color:#ff5e8a;
-    margin-bottom:10px;
-}
-
-p{
-    color:#666;
-    font-size:18px;
-}
-
-.buttons{
-    margin-top:30px;
-    position:relative;
-    height:250px;
-}
-
-button{
-    border:none;
-    border-radius:999px;
-    padding:16px 30px;
-    font-size:20px;
-    cursor:pointer;
-    transition:.25s;
-}
-
-#yesBtn{
-    background:#ff5e8a;
-    color:white;
-    font-weight:bold;
-}
-
-#yesBtn:hover{
-    transform:scale(1.05);
-}
-
-#noBtn{
-    background:#f2f2f2;
-    color:#555;
-    position:absolute;
-}
-
-.success{
-    animation:pop .5s ease;
-}
-
-@keyframes pop{
-    from{
-        transform:scale(.7);
-        opacity:0;
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8c8d8">
+  <meta property="og:title" content="Quick question">
+  <meta property="og:description" content="Will you drink a few beers with Ace?">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <title>Quick Question</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg-top: #fff7db;
+      --bg-bottom: #f7b7c9;
+      --ink: #271b22;
+      --muted: #6f4c5d;
+      --yes: #13795b;
+      --yes-dark: #0e5d46;
+      --no: #ffffff;
+      --no-border: #b85d7a;
+      --shadow: 0 18px 50px rgba(74, 35, 55, 0.22);
     }
-    to{
-        transform:scale(1);
-        opacity:1;
+
+    * {
+      box-sizing: border-box;
     }
-}
-</style>
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.72), transparent 28%),
+        linear-gradient(150deg, var(--bg-top), var(--bg-bottom));
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    main {
+      width: min(92vw, 520px);
+      min-height: 420px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      position: relative;
+      padding: 36px 22px;
+      text-align: center;
+    }
+
+    .question {
+      width: 100%;
+      padding: clamp(24px, 6vw, 44px);
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.82);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .emoji {
+      display: block;
+      font-size: clamp(48px, 15vw, 78px);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 8vw, 54px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    p {
+      max-width: 36ch;
+      margin: 14px auto 0;
+      color: var(--muted);
+      font-size: clamp(17px, 4vw, 21px);
+      line-height: 1.45;
+    }
+
+    .actions {
+      width: min(100%, 360px);
+      height: 88px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 30px;
+    }
+
+    button {
+      min-width: 136px;
+      min-height: 58px;
+      border: 0;
+      border-radius: 8px;
+      font: 700 20px/1 Arial, Helvetica, sans-serif;
+      letter-spacing: 0;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform 160ms ease, box-shadow 160ms ease, left 170ms ease, top 170ms ease;
+    }
+
+    button:focus-visible {
+      outline: 4px solid rgba(39, 27, 34, 0.24);
+      outline-offset: 4px;
+    }
+
+    #yesButton {
+      position: absolute;
+      left: 0;
+      top: 15px;
+      background: var(--yes);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(19, 121, 91, 0.25);
+    }
+
+    #yesButton:hover,
+    #yesButton:focus-visible {
+      background: var(--yes-dark);
+      transform: translateY(-2px);
+    }
+
+    #noButton {
+      position: absolute;
+      left: calc(100% - 136px);
+      top: 15px;
+      background: var(--no);
+      color: #8b2d4c;
+      border: 2px solid var(--no-border);
+      box-shadow: 0 10px 22px rgba(111, 76, 93, 0.15);
+    }
+
+    #noButton.is-running {
+      transform: rotate(-2deg);
+    }
+
+    .answer {
+      min-height: 32px;
+      margin-top: 18px;
+      color: #65304a;
+      font-size: 18px;
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .answer.show {
+      opacity: 1;
+    }
+
+    @media (max-width: 420px) {
+      body {
+        padding: 16px;
+      }
+
+      main {
+        min-height: 500px;
+        padding-inline: 0;
+      }
+
+      .actions {
+        width: 100%;
+        height: 154px;
+        margin-top: 24px;
+      }
+
+      button {
+        min-width: 122px;
+      }
+
+      #yesButton {
+        left: 0;
+        top: 88px;
+      }
+
+      #noButton {
+        left: calc(100% - 122px);
+        top: 88px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <main aria-live="polite">
+    <section class="question">
+      <span class="emoji" aria-hidden="true">🍻</span>
+      <h1>Drink a few beers with Ace?</h1>
+      <p>This is a very serious question with only one reasonable answer.</p>
 
-<div class="card" id="card">
+      <div class="actions" id="buttonArea">
+        <button id="yesButton" type="button">Yes</button>
+        <button id="noButton" type="button">No</button>
+      </div>
 
-<h1>🍺 One Tiny Question...</h1>
+      <div class="answer" id="answer">Perfect. I knew you had excellent taste.</div>
+    </section>
+  </main>
 
-<p id="message">
-Would you like to drink a few beers with Ace?
-</p>
+  <script>
+    const buttonArea = document.querySelector("#buttonArea");
+    const yesButton = document.querySelector("#yesButton");
+    const noButton = document.querySelector("#noButton");
+    const answer = document.querySelector("#answer");
 
-<div class="buttons">
+    function moveNoButton() {
+      const area = buttonArea.getBoundingClientRect();
+      const button = noButton.getBoundingClientRect();
+      const yes = yesButton.getBoundingClientRect();
+      const padding = 4;
+      const maxX = Math.max(padding, area.width - button.width - padding);
+      const maxY = Math.max(padding, area.height - button.height - padding);
+      const currentX = parseFloat(noButton.style.left || noButton.offsetLeft);
+      const currentY = parseFloat(noButton.style.top || noButton.offsetTop);
+      const yesBox = {
+        left: yes.left - area.left - 8,
+        right: yes.right - area.left + 8,
+        top: yes.top - area.top - 8,
+        bottom: yes.bottom - area.top + 8
+      };
 
-<button id="yesBtn">YES! 🍻</button>
+      let nextX = padding + Math.random() * (maxX - padding);
+      let nextY = padding + Math.random() * (maxY - padding);
 
-<button id="noBtn">No</button>
+      for (let attempt = 0; attempt < 24; attempt += 1) {
+        const nextBox = {
+          left: nextX,
+          right: nextX + button.width,
+          top: nextY,
+          bottom: nextY + button.height
+        };
+        const overlapsYes = nextBox.left < yesBox.right &&
+          nextBox.right > yesBox.left &&
+          nextBox.top < yesBox.bottom &&
+          nextBox.bottom > yesBox.top;
 
-</div>
+        if (!overlapsYes) {
+          break;
+        }
 
-</div>
+        nextX = padding + Math.random() * (maxX - padding);
+        nextY = padding + Math.random() * (maxY - padding);
+      }
 
-<script>
+      if (Math.abs(nextX - currentX) < 56) {
+        nextX = nextX < currentX ? maxX : padding;
+      }
 
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
-const msg = document.getElementById("message");
+      if (Math.abs(nextY - currentY) < 34) {
+        nextY = nextY < currentY ? maxY : padding;
+      }
 
-const texts = [
-"Are you sure? 🥺",
-"Really sure? 😭",
-"Think again... 🍺",
-"The beers are getting sad 😔",
-"Come on, it'll be fun 😏",
-"Last chance 👀",
-"You're breaking my heart 💔",
-"Okay now you're just being mean 😂",
-"Fine... but what if I buy the first round? 🍻",
-"NO IS NOT AN OPTION 😈"
-];
+      noButton.style.left = `${nextX}px`;
+      noButton.style.top = `${nextY}px`;
+      noButton.classList.add("is-running");
+      window.setTimeout(() => noButton.classList.remove("is-running"), 180);
+    }
 
-let count = 0;
-let yesScale = 1;
+    noButton.addEventListener("pointerenter", moveNoButton);
+    noButton.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      moveNoButton();
+    });
+    noButton.addEventListener("focus", moveNoButton);
 
-function moveNoButton(){
-
-    const maxX = window.innerWidth - noBtn.offsetWidth - 30;
-    const maxY = window.innerHeight - noBtn.offsetHeight - 30;
-
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-
-    msg.textContent = texts[Math.min(count,texts.length-1)];
-
-    count++;
-
-    yesScale += 0.15;
-    yesBtn.style.transform = `scale(${yesScale})`;
-}
-
-noBtn.addEventListener("mouseover", moveNoButton);
-noBtn.addEventListener("touchstart", moveNoButton);
-
-yesBtn.addEventListener("click", () => {
-
-document.body.innerHTML = `
-<div style="
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#ffd6e7,#ffe8b6);
-font-family:Arial,sans-serif;
-text-align:center;
-">
-
-<div class="success">
-
-<h1 style="font-size:60px;">
-🍻💖
-</h1>
-
-<h1 style="color:#ff5e8a;">
-YAY!!!
-</h1>
-
-<p style="font-size:24px;">
-Beer date confirmed 😎
-</p>
-
-<p>
-I'll start chilling the beers 🍺
-</p>
-
-</div>
-
-</div>
-`;
-});
-
-moveNoButton();
-
-</script>
-
+    yesButton.addEventListener("click", () => {
+      answer.classList.add("show");
+      yesButton.textContent = "Cheers";
+      noButton.style.display = "none";
+    });
+  </script>
 </body>
 </html>
